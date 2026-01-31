@@ -9,362 +9,96 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 
-<body class="text-slate-800">
+<body class="antialiased text-slate-800">
 
+<!-- Control Panel -->
+<div class="no-print flex items-center gap-3">
+    <button onclick="window.print()" class="action-btn" type="button">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+        </svg>
+        Save PDF
+    </button>
+    <button onclick="window.open('portfolio.html', '_blank')" class="action-btn" type="button">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M3 7a2 2 0 012-2h4l2 2h6a2 2 0 012 2v7a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/>
+        </svg>
+        Portfolio
+    </button>
+</div>
 
-    <div style="position: fixed; top: 20px; right: 20px; display: flex; flex-direction: column; gap: 12px; z-index: 1000;">
-        <button onclick="downloadPDF()" id="download-btn">
-            Download CV
-        </button>
-        <button onclick="printCV()" id="print-btn">
-            In CV
-        </button>
+<!-- Main CV Content -->
+<div id="cv-content" class="cv-container mx-auto bg-white shadow-sm my-8 min-h-screen">
+
+    <!-- HEADER -->
+    <header class="p-8 sm:px-12 pt-12 pb-8 border-b border-slate-100 mb-8">
+        <h1 id="fullName" class="text-5xl font-medium text-slate-900 tracking-tight leading-tight mb-2"></h1>
+        <p id="jobTitle" class="text-sm font-medium text-sky-700 uppercase tracking-widest"></p>
+    </header>
+
+    <!-- WRAPPER -->
+    <div class="flex flex-col md:flex-row px-8 sm:px-12 pb-12 gap-10">
+
+        <!-- LEFT COLUMN (Main: 66%) -->
+        <main class="w-full md:w-2/3">
+            <!-- Mobile Contact -->
+            <section class="mb-8 md:hidden mobile-order-1">
+                <h2 class="section-title" id="title-contact-mobile"></h2>
+                <ul class="space-y-2 text-sm text-slate-600" id="contact-container-mobile"></ul>
+            </section>
+
+            <!-- About -->
+            <section class="mb-8 mobile-order-2 section-container">
+                <h2 class="section-title" id="title-about"></h2>
+                <p id="about" class="text-slate-600 text-sm leading-relaxed text-left"></p>
+            </section>
+
+            <!-- Work Experience -->
+            <section class="mb-8 mobile-order-4 section-container">
+                <h2 class="section-title" id="title-experience"></h2>
+                <div class="space-y-6" id="work-experience-container"></div>
+            </section>
+
+            <!-- Projects -->
+            <section class="mobile-order-5 section-container">
+                <h2 class="section-title" id="title-projects"></h2>
+                <div class="space-y-5" id="projects-container"></div>
+            </section>
+        </main>
+
+        <!-- RIGHT COLUMN (Sidebar: 34%) -->
+        <aside class="w-full md:w-1/3">
+            <!-- Desktop Contact -->
+            <section class="mb-8 hidden md:block section-container">
+                <h2 class="section-title" id="title-contact"></h2>
+                <ul class="space-y-3 text-sm text-slate-600" id="contact-container"></ul>
+            </section>
+
+            <!-- Education -->
+            <section class="mb-8 mobile-order-6 md:order-none section-container">
+                <h2 class="section-title" id="title-education"></h2>
+                <div id="education-container"></div>
+            </section>
+
+            <!-- Skills -->
+            <section class="mb-8 mobile-order-3 md:order-none section-container">
+                <h2 class="section-title" id="title-skills"></h2>
+                <div id="skills-container" class="space-y-4"></div>
+            </section>
+
+            <!-- Mobile Skills -->
+            <div id="skills-container-mobile" class="md:hidden space-y-4"></div>
+        </aside>
     </div>
+</div>
 
-    <div id="cv-content" class="cv-container mx-auto p-8 sm:p-12 bg-white shadow-lg my-10">
-        <header class="text-left mb-10">
-            <h1 id="fullName" class="text-4xl md:text-5xl font-bold text-slate-900"></h1>
-            <p id="jobTitle" class="text-xl md:text-2xl text-slate-600 mt-1"></p>
-        </header>
-
-        <div class="flex flex-col md:flex-row md:gap-12">
-            <main class="w-full md:w-2/3">
-                <!-- Contact Section - Mobile Only (order-1) -->
-                <section class="mb-8 md:hidden order-1">
-                    <h2 class="section-title" id="title-contact-mobile"></h2>
-                    <ul class="space-y-2 text-sm" id="contact-container-mobile"></ul>
-                </section>
-
-                <!-- About Section - order-2 on mobile -->
-                <section class="mb-8 order-2">
-                    <h2 class="section-title" id="title-about"></h2>
-                    <p id="about" class="text-sm leading-relaxed"></p>
-                </section>
-
-                <!-- Skills Section - order-3 on mobile, hidden on desktop -->
-                <section class="mb-8 md:hidden order-3">
-                    <h2 class="section-title" id="title-skills-mobile"></h2>
-                    <div id="skills-container-mobile" class="space-y-4"></div>
-                </section>
-
-                <!-- Work Experience Section - order-4 on mobile -->
-                <section class="mb-8 order-4">
-                    <h2 class="section-title" id="title-experience"></h2>
-                    <div class="space-y-6" id="work-experience-container"></div>
-                </section>
-
-                <!-- Projects Section - order-5 on mobile -->
-                <section class="order-5">
-                    <h2 class="section-title" id="title-projects"></h2>
-                    <div class="space-y-4" id="projects-container"></div>
-                </section>
-            </main>
-
-            <aside class="w-full md:w-1/3 mt-8 md:mt-0">
-                <!-- Contact Section - Desktop Only -->
-                <section class="mb-8 hidden md:block">
-                    <h2 class="section-title" id="title-contact"></h2>
-                    <ul class="space-y-2 text-sm" id="contact-container"></ul>
-                </section>
-
-                <!-- Education Section - order-6 on mobile (last) -->
-                <section class="mb-8 order-6 md:order-none">
-                    <h2 class="section-title" id="title-education"></h2>
-                    <div id="education-container"></div>
-                </section>
-
-                <!-- Skills Section - Desktop Only -->
-                <section class="hidden md:block">
-                    <h2 class="section-title" id="title-skills"></h2>
-                    <div id="skills-container" class="space-y-4"></div>
-                </section>
-            </aside>
-        </div>
-    </div>
-    
-    <script src="cv-data.js"></script>
-    <script>
-        function printCV() {
-            const cvContent = document.getElementById('cv-content');
-            const downloadButton = document.getElementById('download-btn');
-            const printButton = document.getElementById('print-btn');
-
-            // Ẩn nút khi in
-            downloadButton.style.display = 'none';
-            printButton.style.display = 'none';
-            document.body.classList.add('pdf-generating');
-
-            // Force desktop layout for printing
-            const originalWidth = cvContent.style.width;
-            const originalMaxWidth = cvContent.style.maxWidth;
-            cvContent.style.width = '1024px';
-            cvContent.style.maxWidth = '1024px';
-
-            // Hide mobile-only elements
-            const mobileElements = cvContent.querySelectorAll('.md\\:hidden');
-            mobileElements.forEach(el => el.style.display = 'none');
-
-            // Show desktop-only elements
-            const desktopElements = cvContent.querySelectorAll('.hidden.md\\:block');
-            desktopElements.forEach(el => {
-                el.style.display = 'block';
-                el.classList.remove('hidden');
-            });
-
-            // Force desktop flex layout
-            const mainContainer = cvContent.querySelector('.flex');
-            const originalFlexDirection = mainContainer.style.flexDirection;
-            const originalGap = mainContainer.style.gap;
-            mainContainer.style.flexDirection = 'row';
-            mainContainer.style.gap = '3rem';
-
-            // Set main and aside widths
-            const mainSection = mainContainer.querySelector('main');
-            const asideSection = mainContainer.querySelector('aside');
-            const originalMainWidth = mainSection.style.width;
-            const originalAsideWidth = asideSection.style.width;
-            const originalAsideMargin = asideSection.style.marginTop;
-            
-            mainSection.style.width = '66.666667%';
-            asideSection.style.width = '33.333333%';
-            asideSection.style.marginTop = '0';
-
-            // Delay print để các style được apply
-            setTimeout(() => {
-                window.print();
-
-                // Restore original styles sau khi in
-                setTimeout(() => {
-                    document.body.classList.remove('pdf-generating');
-                    downloadButton.style.display = 'block';
-                    printButton.style.display = 'block';
-                    cvContent.style.width = originalWidth;
-                    cvContent.style.maxWidth = originalMaxWidth;
-                    mainContainer.style.flexDirection = originalFlexDirection;
-                    mainContainer.style.gap = originalGap;
-                    mainSection.style.width = originalMainWidth;
-                    asideSection.style.width = originalAsideWidth;
-                    asideSection.style.marginTop = originalAsideMargin;
-
-                    // Restore mobile elements
-                    mobileElements.forEach(el => el.style.display = '');
-
-                    // Restore desktop elements
-                    desktopElements.forEach(el => {
-                        el.style.display = '';
-                        el.classList.add('hidden');
-                    });
-                }, 500);
-            }, 100);
-        }
-        document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('title-about').textContent = cvData.sectionTitles.about;
-            document.getElementById('title-experience').textContent = cvData.sectionTitles.workExperience;
-            document.getElementById('title-projects').textContent = cvData.sectionTitles.personalProjects;
-            document.getElementById('title-contact').textContent = cvData.sectionTitles.contact;
-            document.getElementById('title-contact-mobile').textContent = cvData.sectionTitles.contact;
-            document.getElementById('title-education').textContent = cvData.sectionTitles.education;
-            document.getElementById('title-skills').textContent = cvData.sectionTitles.skills;
-            document.getElementById('title-skills-mobile').textContent = cvData.sectionTitles.skills;
-
-            document.getElementById('fullName').textContent = cvData.fullName;
-            document.getElementById('jobTitle').textContent = cvData.jobTitle;
-            document.getElementById('about').innerHTML = cvData.about;
-
-            // Contact info for desktop
-            const contactContainer = document.getElementById('contact-container');
-            const contactHTML = `
-                <li class="flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-sky-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg><span>${cvData.contact.phone}</span></li>
-                <li class="flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-sky-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg><a href="mailto:${cvData.contact.email}">${cvData.contact.email}</a></li>
-                <li class="flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-sky-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg><span>${cvData.contact.address}</span></li>
-                <li class="flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-sky-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg><a href="${cvData.contact.website}" target="_blank">${cvData.contact.websiteDisplay}</a></li>
-            `;
-            contactContainer.innerHTML = contactHTML;
-            
-            // Contact info for mobile
-            const contactContainerMobile = document.getElementById('contact-container-mobile');
-            contactContainerMobile.innerHTML = contactHTML;
-            
-            const educationContainer = document.getElementById('education-container');
-            educationContainer.innerHTML = `
-                <div>
-                    <h3 class="font-bold">${cvData.education.school}</h3>
-                    <p class="text-sm">${cvData.education.major}</p>
-                    <p class="text-xs text-slate-500 font-medium">${cvData.education.period}</p>
-                </div>
-            `;
-
-            const workContainer = document.getElementById('work-experience-container');
-            cvData.workExperience.forEach(work => {
-                let detailsHtml = '';
-                if (work.hasProducts) {
-                    detailsHtml = `<h4 class="font-semibold text-sm mb-1">SẢN PHẨM:</h4>
-                                <ul class="list-disc list-inside space-y-2 pl-2 text-sm">
-                                    ${work.details.map(product => `
-                                        <li>
-                                            <span class="font-bold">${product.name}</span> ${product.description}
-                                            <ul class="list-['-_'] list-inside pl-4 mt-1 text-xs space-y-1 text-slate-600">
-                                                ${product.points.map(point => `<li>${point}</li>`).join('')}
-                                            </ul>
-                                        </li>
-                                    `).join('')}
-                                </ul>`;
-                } else {
-                    detailsHtml = `<ul class="list-disc list-inside mt-2 space-y-1 text-sm">${work.details.map(item => `<li>${item}</li>`).join('')}</ul>`;
-                }
-
-                workContainer.innerHTML += `
-                    <div>
-                        <div class="flex justify-between items-baseline">
-                            <h3 class="font-bold text-lg">${work.company}</h3>
-                            <p class="text-sm text-slate-500 font-medium">${work.period}</p>
-                        </div>
-                        <p class="font-semibold text-sky-800">${work.title}</p>
-                        ${work.description ? `<p class="text-sm mt-1 mb-2">${work.description}</p>` : ''}
-                        ${detailsHtml}
-                    </div>
-                `;
-            });
-            
-            const projectsContainer = document.getElementById('projects-container');
-            cvData.personalProjects.forEach(project => {
-                projectsContainer.innerHTML += `
-                    <div>
-                        <div class="flex justify-between items-baseline">
-                            <h3 class="font-bold text-base">${project.name}</h3>
-                            <p class="text-sm text-slate-500 font-medium">${project.period}</p>
-                        </div>
-                        <ul class="list-disc list-inside text-sm mt-1 space-y-1">
-                            ${project.details.map(detail => `<li>${detail}</li>`).join('')}
-                        </ul>
-                    </div>
-                `;
-            });
-
-            const skillsContainer = document.getElementById('skills-container');
-            const skillsContainerMobile = document.getElementById('skills-container-mobile');
-            cvData.skills.forEach((skillGroup, index) => {
-                const skillsHtml = skillGroup.items.map(skill => {
-                    const colorClasses = index === 0 
-                        ? 'bg-sky-100 text-sky-800' 
-                        : 'bg-slate-200 text-slate-700';
-                    return `<span class="${colorClasses} text-xs font-semibold px-3 py-1 rounded-full">${skill}</span>`;
-                }).join('');
-
-                const skillHTML = `
-                    <div>
-                        <h3 class="font-semibold text-sm mb-2">${skillGroup.category}</h3>
-                        <div class="flex flex-wrap gap-2 skill-wrapper-for-pdf">${skillsHtml}</div>
-                    </div>
-                `;
-                
-                skillsContainer.innerHTML += skillHTML;
-                skillsContainerMobile.innerHTML += skillHTML;
-            });
-        });
-    </script>
-
-    <script>
-        function downloadPDF() {
-            const cvContent = document.getElementById('cv-content');
-            const downloadButton = document.getElementById('download-btn');
-
-            downloadButton.style.display = 'none';
-            document.body.classList.add('pdf-generating');
-
-            // Force desktop layout for PDF
-            const originalWidth = cvContent.style.width;
-            const originalMaxWidth = cvContent.style.maxWidth;
-            const originalPadding = cvContent.style.padding;
-            cvContent.style.width = '1024px';
-            cvContent.style.maxWidth = '1024px';
-            cvContent.style.padding = '48px';
-
-            // Hide mobile-only elements
-            const mobileElements = cvContent.querySelectorAll('.md\\:hidden');
-            mobileElements.forEach(el => {
-                el.style.display = 'none';
-                el.setAttribute('data-hidden', 'true');
-            });
-
-            // Show desktop-only elements
-            const desktopElements = cvContent.querySelectorAll('.hidden.md\\:block');
-            desktopElements.forEach(el => {
-                el.style.display = 'block';
-                el.classList.remove('hidden');
-                el.setAttribute('data-was-hidden', 'true');
-            });
-
-            // Force desktop flex layout
-            const mainContainer = cvContent.querySelector('.flex');
-            const originalFlexDirection = mainContainer.style.flexDirection;
-            const originalGap = mainContainer.style.gap;
-            mainContainer.style.flexDirection = 'row';
-            mainContainer.style.gap = '3rem';
-
-            // Set main and aside widths
-            const mainSection = mainContainer.querySelector('main');
-            const asideSection = mainContainer.querySelector('aside');
-            const originalMainWidth = mainSection.style.width;
-            const originalAsideWidth = asideSection.style.width;
-            const originalAsideMargin = asideSection.style.marginTop;
-            
-            mainSection.style.width = '66.666667%';
-            asideSection.style.width = '33.333333%';
-            asideSection.style.marginTop = '0';
-
-            // Configure html2pdf options
-            const opt = {
-                margin: [5, 10, 10, 10], // top, right, bottom, left
-                filename: 'CV-DangVanThanh.pdf',
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { 
-                    scale: 2,
-                    useCORS: true,
-                    letterRendering: true,
-                    width: 1024
-                },
-                jsPDF: { 
-                    unit: 'mm', 
-                    format: 'a4', 
-                    orientation: 'portrait' 
-                }
-            };
-
-            // Generate PDF
-            html2pdf().set(opt).from(cvContent).save().then(() => {
-                // Restore original styles
-                document.body.classList.remove('pdf-generating');
-                downloadButton.style.display = 'block';
-                cvContent.style.width = originalWidth;
-                cvContent.style.maxWidth = originalMaxWidth;
-                cvContent.style.padding = originalPadding;
-                mainContainer.style.flexDirection = originalFlexDirection;
-                mainContainer.style.gap = originalGap;
-                mainSection.style.width = originalMainWidth;
-                asideSection.style.width = originalAsideWidth;
-                asideSection.style.marginTop = originalAsideMargin;
-
-                // Restore mobile elements
-                mobileElements.forEach(el => {
-                    el.style.display = '';
-                    el.removeAttribute('data-hidden');
-                });
-
-                // Restore desktop elements
-                desktopElements.forEach(el => {
-                    el.style.display = '';
-                    el.classList.add('hidden');
-                    el.removeAttribute('data-was-hidden');
-                });
-            });
-        }
-    </script>
+<script src="data.js"></script>
 </body>
-
 </html>
