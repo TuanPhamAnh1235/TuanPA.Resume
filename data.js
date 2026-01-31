@@ -6,13 +6,13 @@ const cvData = {
         title: "Danh mục dự án",
         subTitle: "Tổng hợp các sản phẩm và dự án nghiên cứu kỹ thuật cá nhân trong quá trình học tập và làm việc.",
         footerText: "© 2026 Đặng Văn Thanh",
-        personalSectionTitle: "Dự án Cá nhân"
+        personalSectionTitle: "Technical R&D"
     },
     about: "Mình là Game Developer với <b>4+ năm kinh nghiệm</b> làm việc với <b>Unity</b> và <b>C#</b>. Có kiến thức về OOP, ECS, Design Pattern, System Design... Đã tham gia phát triển đa dạng thể loại từ hyper-casual đến hybrid-casual. Có khả năng làm việc độc lập và phối hợp nhóm hiệu quả. <br><br>Ngoài ra, mình còn tự xây dựng hệ thống Home Lab Proxmox và quy trình <b>CI/CD</b> với <b>Jenkins</b> để quản lý package.<br><br>Hiện tại mình mong muốn được tham gia các dự án game chất lượng cao và phát triển sâu hơn về kỹ thuật <b>Technical Art, Software Architecture</b> và <b>Performance Optimization</b>.",
     sectionTitles: {
         about: "Giới thiệu",
         workExperience: "Kinh nghiệm làm việc",
-        personalProjects: "Dự án cá nhân",
+        personalProjects: "Technical R&D",
         contact: "Liên hệ",
         education: "Học vấn",
         skills: "Kỹ năng"
@@ -31,10 +31,6 @@ const cvData = {
         major: "Khoa IT - Chuyên ngành Khoa học Máy tính",
         period: "09/2016 - 09/2022"
     },
-    displayConfig: {
-        defaultWorkProjects: 3,
-        defaultPersonalProjects: 2
-    },
     workExperience: [
         {
             company: "Ohze",
@@ -45,22 +41,24 @@ const cvData = {
             moreProjectsLink: "portfolio.html#Ohze",
             details: [
                 {
+                    icon: "gamepad-2",
                     name: "Train Loop: TD",
                     genre: "Tower Defense / Strategy",
                     description: "Dự án game Hybrid-casual thể loại Tower Defense kết hợp Strategy.",
-                    tags: ["Unity", "iOS", "UI/UX"],
+                    tags: ["Unity", "C#", "Solo", "Pragmatic Architecture"],
                     link: "https://www.taptap.io/app/33874766",
                     linkText: "TapTap",
                     points: [
-                        "Phát triển tính năng Inventory, Daily Check-in.",
-                        "Làm việc với back-end để xử lý và đồng bộ dữ liệu cho tính năng Daily Check-in."
+                        "Chủ động loại bỏ các pattern phức tạp (như DI Framework) để tránh over-engineering.",
+                        "Triển khai Spatial Partitioning (Grid-based) để tối ưu hiệu năng."
                     ]
                 },
                 {
+                    icon: "gamepad-2",
                     name: "Super Hero Defense",
                     genre: "Tower Defense / Roguelike",
                     description: "Dự án game Hybrid-casual thể loại Tower Defense kết hợp Roguelike.",
-                    tags: ["Unity", "C#", "Dependency Injection", "Strategy", "Factory"],
+                    tags: ["Unity", "C#", "Teamwork", "Dependency Injection", "Strategy", "Factory"],
                     link: "https://www.taptap.io/app/33910058",
                     linkText: "TapTap",
                     points: [
@@ -81,6 +79,7 @@ const cvData = {
                     ]
                 },
                 {
+                    icon: "gamepad-2",
                     name: "Arrow Break Out",
                     genre: "Puzzle / Casual",
                     description: "Dự án game giải đố được phát triển và phát hành trong khuôn khổ chương trình CrazyHubs của CrazyLabs.",
@@ -103,10 +102,11 @@ const cvData = {
             moreProjectsLink: "portfolio.html#Bravestars",
             details: [
                 {
+                    icon: "gamepad-2",
                     name: "Candy Battle",
-                    genre: "Survivor.io / Action",
-                    description: "Dự án game hành động nhập vai lấy cảm hứng từ thể loại Survivor.io.",
-                    tags: ["Unity", "C#", "ECS", "Optimization"],
+                    genre: "Adventure / Action",
+                    description: "Dự án game hành động nhập vai lấy cảm hứng từ game Survivor.io.",
+                    tags: ["Unity", "C#", "ECS (Entitas)", "Optimization"],
                     link: "https://www.taptap.io/app/320447",
                     linkText: "TapTap",
                     points: [
@@ -115,15 +115,16 @@ const cvData = {
                     ]
                 },
                 {
+                    icon: "gamepad-2",
                     name: "Cat Restaurant Tycoon",
                     genre: "Simulation / Management",
-                    description: "Game quản lý nhà hàng cho iOS. Phát triển tính năng Inventory, Daily Check-in.",
-                    tags: ["Unity", "iOS", "UI/UX"],
+                    description: "Game quản lý nhà hàng cho iOS.",
+                    tags: ["Unity", "C#", "iOS", "API Integration"],
                     link: "https://www.taptap.io/app/33656534",
                     linkText: "TapTap",
                     points: [
                         "Phát triển tính năng Inventory, Daily Check-in.",
-                        "Làm việc với back-end để xử lý và đồng bộ dữ liệu cho tính năng Daily Check-in."
+                        "Xử lý tích hợp API (Client-side): Thực hiện gọi API, xử lý dữ liệu trả về để đồng bộ với Server."
                     ]
                 }
             ]
@@ -135,20 +136,50 @@ const cvData = {
             description: [
                 "Phát triển, bảo trì các dự án game hyper-casual.",
                 "Tích hợp quảng cáo, tracking cho game.",
-                "Quản lý, phân bố công việc cho các thành viên trong team."
+                "Theo dõi tiến độ các thành viên trong team dev."
             ],
+            maxProjects: 0,
+            moreProjectsLink: "portfolio.html#Omegame",
             details: [
                 {
-                    name: "Hyper-casual Projects",
-                    genre: "Hyper-casual",
-                    description: "Phát triển, bảo trì các dự án game hyper-casual. Tích hợp quảng cáo, tracking và quản lý team.",
-                    tags: ["Unity", "AdMob", "Tracking", "Team Lead"],
-                    icon: "zap",
-                    points: [
-                        "Phát triển, bảo trì các dự án game hyper-casual.",
-                        "Tích hợp quảng cáo, tracking cho game.",
-                        "Quản lý, phân bố công việc cho các thành viên trong team."
-                    ]
+                    icon: "gamepad-2",
+                    name: "Metamon",
+                    genre: "Casual",
+                    description: "Dự án game bắt quái theo phong cách Pokemon.",
+                    tags: ["Unity", "C#"],
+                    link: "https://apkpure.com/vn/metamon/com.metamon.pkm.zoo.monster",
+                    linkText: "APKPure",
+                    points: []
+                },
+                {
+                    icon: "gamepad-2",
+                    name: "Fall Party",
+                    genre: "Casual",
+                    description: "Dự án game 3D casual lây cảm hứng từ Fall Guys.",
+                    tags: ["Unity", "C#"],
+                    link: "https://apkpure.com/vn/fall-party/com.fall.party.guys.fallguyparty.gameparty",
+                    linkText: "APKPure",
+                    points: ["Sử dụng MLAgent để huấn luyện AI cho bot trong game."]
+                },
+                {
+                    icon: "gamepad-2",
+                    name: "Hook Guys Party",
+                    genre: "Casual",
+                    description: "Dự án game đối kháng vui nhộn.",
+                    tags: ["Unity", "C#"],
+                    link: "https://apkpure.com/vn/hook-guys-party/com.hook.guys.party.wuggyparty.hypercasual",
+                    linkText: "APKPure",
+                    points: ["Bước đầu tìm hiểu về tối ưu Lighting."]
+                },
+                {
+                    icon: "gamepad-2",
+                    name: "Beach Defence BH",
+                    genre: "Arcade",
+                    description: "Dự án game thủ thành phong cách Beach Head.",
+                    tags: ["Unity", "C#"],
+                    link: "https://apkpure.com/vn/metamon/com.metamon.pkm.zoo.monster",
+                    linkText: "APKPure",
+                    points: ["Tìm hiểu về game 3D và AI trong game."]
                 }
             ]
         }
@@ -161,7 +192,7 @@ const cvData = {
                 genre: "Tooling / Open Source",
                 description: "Dự án tổng hợp các tools và tiện ích cần thiết để triển khai nhanh một dự án game với Unity.",
                 tags: ["Tooling", "Unity", "Open Source"],
-                icon: "box",
+                icon: "package",
                 link: "https://github.com/ThanhDang143/UnityStarterKit.git",
                 linkText: "Link GitHub",
                 points: [
@@ -169,12 +200,25 @@ const cvData = {
                 ]
             },
             {
+                name: "UNITY STARTER KIT",
+                period: "08/2024",
+                genre: "Tooling / Open Source",
+                description: "Dự án tổng hợp các tools và tiện ích cần thiết để triển khai nhanh một dự án game với Unity.",
+                tags: ["Tooling", "Unity", "Open Source"],
+                icon: "cpu",
+                link: "https://github.com/ThanhDang143/UnityStarterKit.git",
+                linkText: "Link GitHub",
+                points: [
+                    "Tích hợp sẵn các module thường dùng: Audio Manager, Pooling, Event System."
+                ]
+            },
+            {
+                icon: "gamepad-2",
                 name: "ALPHA",
                 period: "10/2022",
                 genre: "Multiplayer / FPS",
                 description: "Game bắn súng multiplayer góc nhìn thứ 3.",
                 tags: ["Multiplayer", "Photon", "FPS/TPS"],
-                icon: "crosshair",
                 link: "https://youtu.be/YGOPBS1dHss",
                 linkText: "Link YouTube",
                 points: [
@@ -188,7 +232,7 @@ const cvData = {
                 genre: "Unreal Engine / Action",
                 description: "Sản phẩm bắn tank góc nhìn thứ 3.",
                 tags: ["Unreal Engine 4", "C++", "Tank"],
-                icon: "shield",
+                icon: "gamepad-2",
                 link: "https://youtu.be/5V0fplvsn70",
                 linkText: "Link YouTube",
                 points: [
@@ -207,11 +251,11 @@ const cvData = {
         },
         {
             category: "Unity Libraries & Tools",
-            items: ["FMOD", "Addressables", "UniTask", "Odin Inspector"]
+            items: ["FMOD", "Addressables", "UniTask", "Odin Inspector", "..."]
         },
         {
             category: "Công cụ khác",
-            items: ["Git", "Photoshop", "Figma", "ClickUp", "Jenkins (CI/CD)"]
+            items: ["Git", "Photoshop", "Figma", "ClickUp", "Jenkins (CI/CD)", "..."]
         }
     ]
 };
@@ -287,74 +331,74 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Work Experience
     const workContainer = document.getElementById('work-experience-container');
-    cvData.workExperience.forEach(work => {
-        let mainContentHtml = '';
 
-        if (work.description) {
-            if (Array.isArray(work.description)) {
-                mainContentHtml += `<div class="mb-3 space-y-1 text-sm text-slate-600 italic leading-relaxed">
-                            ${work.description.map(d => `<p>${d}</p>`).join('')}
-                        </div>`;
-            } else {
-                mainContentHtml += `<p class="mb-3 text-xs text-slate-600 italic leading-relaxed">${work.description}</p>`;
+    if (workContainer && cvData.workExperience) {
+        cvData.workExperience.forEach(work => {
+            let mainContentHtml = '';
+
+            if (work.description) {
+                if (Array.isArray(work.description)) {
+                    mainContentHtml += `<div class="mb-3 space-y-1 text-sm text-slate-600 italic leading-relaxed">
+                                ${work.description.map(d => `<p>${d}</p>`).join('')}
+                            </div>`;
+                } else {
+                    mainContentHtml += `<p class="mb-3 text-xs text-slate-600 italic leading-relaxed">${work.description}</p>`;
+                }
             }
-        }
 
-        // Handle Details (Tự động thêm Link vào cuối list)
-        if (Array.isArray(work.details) && work.details.length > 0) {
-            mainContentHtml += `<div class="mt-3 space-y-4">
-                        ${work.details.map(p => `
-                            <div class="relative pl-4 border-l-2 border-slate-200">
-                                <div class="mb-1">
-                                    <h4 class="font-bold text-slate-800 text-sm inline-block mr-2">${p.name}</h4>
-                                    <span class="text-xs text-slate-500 italic font-medium">${p.genre}</span>
+            if (Array.isArray(work.details) && work.details.length > 0) {
+                const limit = (work.maxProjects !== undefined) ? work.maxProjects : 2;
+                const visibleDetails = work.details.slice(0, limit);
+
+                mainContentHtml += `<div class="mt-3 space-y-4">
+                            ${visibleDetails.map(p => `
+                                <div class="relative pl-4 border-l-2 border-slate-200">
+                                    <div class="mb-1">
+                                        <h4 class="font-bold text-slate-800 text-sm inline-block mr-2">${p.name}</h4>
+                                        <span class="text-xs text-slate-500 italic font-medium">${p.genre}</span>
+                                    </div>
+                                    ${p.description ? `<p class="mb-2 text-sm text-slate-600 italic leading-relaxed">${p.description}</p>` : ''}
+                                    <ul class="list-disc list-outside ml-4 text-sm text-slate-600 space-y-1 marker:text-slate-400">
+                                        ${p.points.map(pt => `<li>${pt}</li>`).join('')}
+                                        ${generateLinkHtml(p.link, p.linkText)}
+                                    </ul>
                                 </div>
-                                ${p.description ? `<p class="mb-2 text-sm text-slate-600 italic leading-relaxed">${p.description}</p>` : ''}
-                                <ul class="list-disc list-outside ml-4 text-sm text-slate-600 space-y-1 marker:text-slate-400">
-                                    ${p.points.map(pt => `<li>${pt}</li>`).join('')}
-                                    ${generateLinkHtml(p.link, p.linkText)}
-                                </ul>
-                            </div>
-                        `).join('')}
-                    </div>`;
+                            `).join('')}
+                        </div>`;
 
-            const globalLimit = cvData.displayConfig?.defaultWorkProjects || 100;
-            const limit = (work.maxProjects !== undefined) ? work.maxProjects : globalLimit;
+                const totalProjects = work.details.length;
+                if (work.moreProjectsLink || totalProjects > limit) {
+                    const targetLink = work.moreProjectsLink || 'portfolio.html';
 
-            const visibleDetails = work.details.slice(0, limit);
-
-            if (work.moreProjectsLink || work.details.length > limit) {
-                mainContentHtml += `
-                            <div class="mt-2 pl-4 text-xs">
-                                <a href="${work.moreProjectsLink}" target="_blank" class="text-sky-600 hover:underline italic flex items-center gap-1">
-                                    + Xem thêm các dự án khác...
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
-                                </a>
-                            </div>
-                        `;
+                    mainContentHtml += `
+                                <div class="mt-2 pl-4 text-xs">
+                                    <a href="${targetLink}" target="_blank" class="text-sky-600 hover:underline italic flex items-center gap-1">
+                                        + Xem thêm các dự án khác...
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                                    </a>
+                                </div>
+                            `;
+                }
             }
-        }
 
-        workContainer.innerHTML += `
-                    <div class="relative job-entry">
-                        <div class="flex justify-between items-baseline mb-1">
-                            <h3 class="font-bold text-base text-slate-900">${work.company}</h3>
-                            <span class="text-xs font-mono text-slate-500 whitespace-nowrap">${work.period}</span>
+            workContainer.innerHTML += `
+                        <div class="relative job-entry">
+                            <div class="flex justify-between items-baseline mb-1">
+                                <h3 class="font-bold text-base text-slate-900">${work.company}</h3>
+                                <span class="text-xs font-mono text-slate-500 whitespace-nowrap">${work.period}</span>
+                            </div>
+                            <p class="text-sm font-semibold text-sky-700 mb-2">${work.title}</p>
+                            ${mainContentHtml}
                         </div>
-                        <p class="text-sm font-semibold text-sky-700 mb-2">${work.title}</p>
-                        ${mainContentHtml}
-                    </div>
-                `;
-    });
+                    `;
+        });
+    }
 
     // Projects
     const projectsContainer = document.getElementById('projects-container');
 
     if (projectsContainer && cvData.personalProjects && cvData.personalProjects.projects) {
-        const globalPersonalLimit = cvData.displayConfig?.defaultPersonalProjects || 100;
-        const personalLimit = (cvData.personalProjects.maxProjects !== undefined)
-            ? cvData.personalProjects.maxProjects
-            : globalPersonalLimit;
+        const personalLimit = (cvData.personalProjects.maxProjects !== undefined) ? cvData.personalProjects.maxProjects : 3;
 
         const visiblePersonalProjects = cvData.personalProjects.projects.slice(0, personalLimit);
 
@@ -413,5 +457,4 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
     renderSkills('skills-container');
-    renderSkills('skills-container-mobile');
 });

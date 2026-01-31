@@ -261,4 +261,25 @@ a:hover {
         text-decoration: none !important;
         color: var(--accent-color) !important;
     }
+
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+
+    .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+
+    /* Mặc định hiển thị nút (cho PC mọi kích thước) */
+    .nav-btn {
+        display: flex;
+    }
+
+    /* CHỈ ẩn nút trên thiết bị có cơ chế trỏ "thô" (ngón tay/cảm ứng) */
+    @media (pointer: coarse) {
+        .touch-hidden {
+            display: none !important;
+        }
+    }
 }
