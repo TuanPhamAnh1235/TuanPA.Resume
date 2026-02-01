@@ -1366,3 +1366,30 @@ a:hover {
     }
   }
 }
+
+/* Custom Scrollbar for Modal */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1; /* slate-300 */
+    border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: #94a3b8; /* slate-400 */
+}
+
+/* Ẩn scrollbar trên modal thumbnails nhưng vẫn cho cuộn */
+#modal-thumbnails::-webkit-scrollbar {
+    height: 4px;
+}
+#modal-thumbnails::-webkit-scrollbar-thumb {
+    background-color: rgba(255,255,255,0.3);
+}

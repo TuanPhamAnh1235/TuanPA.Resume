@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
 
     <style>
         body {
@@ -80,6 +81,74 @@
         </div>
     </div>
 </footer>
+
+<div id="project-modal" class="fixed inset-0 z-[200] hidden items-center justify-center p-4 sm:p-8 transition-opacity duration-300 opacity-0 pointer-events-none" aria-hidden="true">
+    
+    <div class="absolute inset-0 bg-slate-50/80 backdrop-blur-sm transition-opacity" onclick="closeModal()"></div>
+    
+    <div id="modal-animation-wrapper" class="relative w-full max-w-5xl z-10 transform scale-95 opacity-0 transition-all duration-300 ease-out">
+        
+        <button onclick="closeModal()" class="absolute top-2 right-3 md:-top-5 md:-right-5 p-2 bg-white text-slate-900 hover:bg-slate-100 rounded-full transition-all z-50 shadow-lg border border-slate-200 hover:scale-110 hover:rotate-90 duration-300">
+            <i data-lucide="x" class="w-6 h-6"></i>
+        </button>
+
+        <div id="modal-content" class="bg-white w-full max-h-[85vh] sm:max-h-[90vh] rounded-2xl overflow-hidden shadow-2xl flex flex-col border border-slate-200">
+            <div class="overflow-y-auto custom-scrollbar flex-grow">
+                
+                <div id="modal-media-section" class="w-full bg-white flex flex-col border-b border-slate-100">
+                    
+                    <div id="modal-main-media" class="w-full aspect-video flex items-center justify-center bg-slate-50 overflow-hidden relative">
+                        </div>
+
+                    <div class="w-full py-4 border-t border-slate-100 bg-white">
+                        <div class="w-full px-2 md:px-8 flex items-center gap-2 md:gap-4">
+                            
+                            <button onclick="scrollThumbnails(-1)" class="flex-shrink-0 p-2 rounded-full text-slate-400 hover:text-sky-600 hover:bg-slate-100 transition-colors">
+                                <i data-lucide="chevron-left" class="w-6 h-6"></i>
+                            </button>
+
+                            <div id="modal-thumbnails" class="flex-1 flex gap-3 overflow-x-auto custom-scrollbar scroll-smooth justify-start p-2">
+                                </div>
+
+                            <button onclick="scrollThumbnails(1)" class="flex-shrink-0 p-2 rounded-full text-slate-400 hover:text-sky-600 hover:bg-slate-100 transition-colors">
+                                <i data-lucide="chevron-right" class="w-6 h-6"></i>
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-6 pt-14 md:p-8">
+                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 mb-6 border-b border-slate-100 pb-6">
+                        
+                        <div>
+                            <h2 id="modal-title" class="text-3xl font-bold text-slate-900 mb-2"></h2>
+                            <div id="modal-genre" class="text-sky-700 font-bold uppercase tracking-widest text-xs"></div>
+                        </div>
+
+                        <div id="modal-links" class="flex gap-3"></div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div class="md:col-span-2 space-y-6">
+                            <div>
+                                <h3 class="font-bold text-slate-900 text-sm uppercase tracking-wide mb-2 flex items-center gap-2"><i data-lucide="info" class="w-4 h-4 text-sky-600"></i> Mô tả</h3>
+                                <p id="modal-desc" class="text-slate-600 text-sm leading-relaxed"></p>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-slate-900 text-sm uppercase tracking-wide mb-2 flex items-center gap-2"><i data-lucide="cpu" class="w-4 h-4 text-sky-600"></i> Chi tiết kỹ thuật</h3>
+                                <ul id="modal-points" class="list-disc ml-5 space-y-2 text-slate-600 leading-relaxed text-sm"></ul>
+                            </div>
+                        </div>
+                        <div class="space-y-4">
+                            <h3 class="font-bold text-slate-900 text-sm uppercase tracking-wide mb-2 flex items-center gap-2"><i data-lucide="code-2" class="w-4 h-4 text-sky-600"></i> Công nghệ</h3>
+                            <div id="modal-tags" class="flex flex-wrap gap-2"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script src="data.js"></script>
 
@@ -181,11 +250,14 @@
         // B. Render Dự án cá nhân
         if (cvData.personalProjects && cvData.personalProjects.projects.length > 0) {
             const title = cvData.portfolioInfo?.personalSectionTitle || "Personal Projects";
+            // Lấy màu từ data, nếu không có thì dùng mặc định Sky Blue
+            const color = cvData.personalProjects.theme || "#0369a1"; 
+            
             const sectionHtml = generateSectionHtml(
                 title,
                 'code-2',
                 cvData.personalProjects.projects,
-                false
+                color // Truyền mã màu
             );
             mainContainer.insertAdjacentHTML('beforeend', sectionHtml);
         }
@@ -193,52 +265,55 @@
         // A. Render từng công ty trong Work Experience
         cvData.workExperience.forEach(work => {
             if (work.details && work.details.length > 0) {
+                // Lấy màu từ data, nếu không có thì dùng mặc định Slate (cho giống cũ) hoặc Sky
+                const color = work.theme || "#0369a1"; 
+
                 const sectionHtml = generateSectionHtml(
                     work.company,
                     'briefcase',
                     work.details,
-                    true
+                    color // Truyền mã màu
                 );
                 mainContainer.insertAdjacentHTML('beforeend', sectionHtml);
             }
         });
     }
 
-    // Helper: Hàm sinh HTML cho một Section
-    function generateSectionHtml(title, iconName, projects, isCompany) {
-        const sectionId = isCompany ? title.replace(/\s+/g, '') : "PersonalProjects";
+// Helper: Hàm sinh HTML cho một Section
+    function generateSectionHtml(title, iconName, projects, themeColor) {
+        // Tạo ID an toàn
+        const sectionId = title.replace(/\s+/g, '');
 
         const cardsHtml = projects.map(proj => `
         <div class="w-[85vw] md:w-[380px] flex-shrink-0 snap-start h-full">
-            ${renderCard(proj, isCompany ? title : "Personal Project", isCompany)}
+            ${renderCard(proj, title === "Technical R&D" ? "ThanhDV" : title, themeColor)}
         </div>
     `).join('');
 
         return `
-        <section id="section-${sectionId}" class="scroll-mt-24 mb-12">
+        <section id="${sectionId}" class="scroll-mt-24 mb-12">
             <div class="flex items-center justify-between mb-0 px-1">
 
                 <div class="flex items-center gap-3">
-                    <i data-lucide="${iconName}" class="text-sky-700 w-6 h-6"></i>
+                    <i data-lucide="${iconName}" style="color: ${themeColor}" class="w-6 h-6"></i>
                     <h3 class="text-xl font-bold text-slate-900 uppercase tracking-wider">${title}</h3>
                 </div>
 
-                <div class="flex gap-2 translate-y-[20px]">
+                <div class="flex gap-2 translate-y-[12px]">
                     <button id="btn-left-${sectionId}"
                             onclick="handleScroll('${sectionId}', -1)"
                             class="flex items-center justify-center w-10 h-10 rounded-full
-                                   border border-slate-300 bg-white text-sky-700
-                                   hover:bg-sky-50 hover:text-sky-700 hover:border-sky-200
-                                   transition-all duration-200 shadow-md cursor-pointer"
-                            style="opacity: 0.5; pointer-events: none;"> <i data-lucide="chevron-left" class="w-5 h-5"></i>
+                                   border border-slate-300 bg-white text-slate-500
+                                   hover:bg-slate-50 transition-all duration-200 shadow-md cursor-pointer"
+                            style="opacity: 0.5; pointer-events: none;"> 
+                            <i data-lucide="chevron-left" class="w-5 h-5"></i>
                     </button>
 
                     <button id="btn-right-${sectionId}"
                             onclick="handleScroll('${sectionId}', 1)"
                             class="flex items-center justify-center w-10 h-10 rounded-full
-                                   border border-slate-300 bg-white text-sky-700
-                                   hover:bg-sky-50 hover:text-sky-700 hover:border-sky-200
-                                   transition-all duration-200 shadow-md cursor-pointer">
+                                   border border-slate-300 bg-white text-slate-500
+                                   hover:bg-slate-50 transition-all duration-200 shadow-md cursor-pointer">
                         <i data-lucide="chevron-right" class="w-5 h-5"></i>
                     </button>
                 </div>
@@ -256,32 +331,75 @@
     }
 
     // Helper: Hàm sinh HTML cho từng Card dự án
-    function renderCard(proj, subtitle, isComp) {
+    function renderCard(proj, subtitle, themeColor) {
+        // Fallback màu nếu bị thiếu
+        const color = themeColor || '#0369a1';
+        
+        // Tạo các biến màu từ mã hex chính
+        // Thêm '1a' vào cuối hex 6 ký tự để tạo độ trong suốt ~10% (cho background)
+        // Thêm '33' để tạo độ trong suốt ~20% (cho border nhạt)
+        const bgStyle = `background-color: ${color}1a; color: ${color}; border-color: ${color}33;`;
+        const textStyle = `color: ${color};`;
+        const borderTopStyle = `background-color: ${color};`;
+
         const tags = proj.tags?.map(t =>
-            `<span class="bg-sky-50 text-sky-700 text-[10px] font-bold px-1.5 py-0.5 rounded border border-sky-100 uppercase tracking-tighter">${t}</span>`
+            // Áp dụng style màu động cho Tags (thay vì bg-sky-50...)
+            `<span style="${bgStyle}" class="text-[10px] font-bold px-1.5 py-0.5 rounded border uppercase tracking-tighter">${t}</span>`
         ).join('') || '';
 
         const points = proj.points?.map(p =>
             `<li class="mb-1 text-[13px] leading-snug">${p}</li>`
         ).join('') || '';
 
+        // Logic Icon/Ảnh
+        const iconValue = proj.icon || (subtitle === "Personal Project" ? 'code' : 'gamepad-2');
+        const isImagePath = iconValue.includes('/') || iconValue.includes('.');
+        const iconSize = '64px'; 
+        
+        let iconHtml;
+        if (isImagePath) {
+            iconHtml = `
+                <img src="${iconValue}" 
+                     alt="${proj.name}" 
+                     onerror="this.style.display='none'"
+                     style="width: ${iconSize}; height: ${iconSize}; border-radius: 12px;"
+                     class="object-cover border border-slate-100 shadow-sm bg-white shrink-0">
+            `;
+        } else {
+            // Áp dụng màu động cho Icon Lucide (thay vì bg-slate-50...)
+            iconHtml = `
+                <div style="width: ${iconSize}; height: ${iconSize}; ${bgStyle} border-radius: 12px;"
+                     class="flex items-center justify-center transition-colors shrink-0">
+                    <i data-lucide="${iconValue}" class="w-7 h-7"></i>
+                </div>
+            `;
+        }
+
+        // Script nhỏ inline để xử lý hover cho Title (vì inline style không hỗ trợ :hover)
+        const hoverTitleScript = `onmouseover="this.style.color='${color}'" onmouseout="this.style.color=''"`;
+
         return `
             <div onclick="openProjectModal('${proj.name}')"
-                 class="project-card bg-white rounded-xl p-6 h-full flex flex-col relative group cursor-pointer">
+                 class="project-card bg-white rounded-xl p-6 h-full flex flex-col relative group cursor-pointer border border-slate-200 hover:shadow-lg transition-all duration-300"
+                 style="border-color: #e2e8f0;" 
+                 onmouseover="this.style.borderColor='${color}40'" 
+                 onmouseout="this.style.borderColor='#e2e8f0'">
 
-                <div class="absolute top-0 left-0 w-full h-1 ${isComp ? 'bg-sky-700' : 'bg-slate-400'} rounded-t-xl transition-all group-hover:h-1.5"></div>
+                <div style="${borderTopStyle}" class="absolute top-0 left-0 w-full h-1 rounded-t-xl transition-all group-hover:h-1.5"></div>
 
-                <div class="flex justify-between items-start mb-4">
-                    <div class="p-2.5 bg-slate-50 text-slate-400 rounded-lg group-hover:bg-sky-50 group-hover:text-sky-700 transition-colors">
-                        <i data-lucide="${proj.icon || (isComp ? 'gamepad-2' : 'code')}" class="w-5 h-5"></i>
+                <div class="flex items-start gap-4 mb-3">
+                    ${iconHtml}
+                    
+                    <div class="flex-grow min-w-0 pt-0.5">
+                        <div class="flex justify-between items-start">
+                            <h4 ${hoverTitleScript} class="text-base font-bold text-slate-900 leading-tight transition-colors line-clamp-2 pr-1">
+                                ${proj.name}
+                            </h4>
+                            <span class="text-[9px] font-bold text-slate-400 uppercase tracking-[0.15em] text-right shrink-0 mt-0.5 ml-2">${subtitle}</span>
+                        </div>
+                        <div style="${textStyle}" class="text-[10px] font-bold mt-1.5 italic tracking-tight uppercase">${proj.genre || ''}</div>
                     </div>
-                    <span class="text-[9px] font-bold text-slate-400 uppercase tracking-[0.15em] text-right">${subtitle}</span>
                 </div>
-
-                <h4 class="text-base font-bold text-slate-900 mb-0.5 group-hover:text-sky-700 transition-colors">
-                    ${proj.name}
-                </h4>
-                <div class="text-[10px] text-sky-600 font-bold mb-3 italic tracking-tight uppercase">${proj.genre || ''}</div>
 
                 <p class="text-slate-600 text-[13px] font-medium leading-relaxed mb-4 line-clamp-2">
                     ${proj.description}
@@ -295,8 +413,9 @@
                     ${tags}
                 </div>
 
-                <div class="absolute bottom-4 right-4 text-slate-200 group-hover:text-sky-400 transition-colors">
-                    <i data-lucide="maximize-2" class="w-3 h-3"></i>
+                <div class="absolute bottom-4 right-4 text-slate-200 transition-colors"
+                     onmouseover="this.style.color='${color}'" 
+                     onmouseout="this.style.color='rgb(226 232 240)'"> <i data-lucide="maximize-2" class="w-3 h-3"></i>
                 </div>
             </div>`;
     }
@@ -372,8 +491,194 @@
         });
     }
 
+    // --- LOGIC MODAL & MEDIA ---
+
+    // Hàm helper để tìm dự án trong data
+    function findProjectData(projectName) {
+        // Tìm trong Work Experience
+        for (const work of cvData.workExperience) {
+            const found = work.details?.find(p => p.name === projectName);
+            if (found) return found;
+        }
+        // Tìm trong Personal Projects
+        if (cvData.personalProjects?.projects) {
+            return cvData.personalProjects.projects.find(p => p.name === projectName);
+        }
+        return null;
+    }
+
+    // Hàm chuyển đổi link Youtube thường thành link Embed
+    function getYoutubeEmbedUrl(url) {
+        if (!url) return '';
+        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+        const match = url.match(regExp);
+        return (match && match[2].length === 11) ? `https://www.youtube.com/embed/${match[2]}` : url;
+    }
+
     function openProjectModal(projectName) {
-        console.log("Mở chi tiết dự án: " + projectName);
+        // ... (Giữ nguyên phần logic tìm data và điền text/media ở đây) ...
+        const project = findProjectData(projectName);
+        if (!project) return;
+        // Fill Text Data...
+        document.getElementById('modal-title').textContent = project.name;
+        document.getElementById('modal-genre').textContent = project.genre || 'Project';
+        document.getElementById('modal-desc').textContent = project.description || '';
+        document.getElementById('modal-points').innerHTML = project.points?.map(p => `<li>${p}</li>`).join('') || '';
+        document.getElementById('modal-tags').innerHTML = project.tags?.map(t => `<span class="px-3 py-1 bg-slate-100 text-slate-600 text-xs font-semibold rounded border border-slate-200">${t}</span>`).join('') || '';
+
+        const linksContainer = document.getElementById('modal-links');
+        let linksHtml = '';
+        if (project.link) {
+            linksHtml += `
+                <a href="${project.link}" target="_blank" class="flex items-center gap-2 px-4 py-2 bg-sky-600 hover:bg-sky-700 text-white text-sm font-bold rounded-lg transition-all shadow-md hover:shadow-lg">
+                    <span>${project.linkText || 'Xem Project'}</span>
+                    <i data-lucide="external-link" class="w-4 h-4"></i>
+                </a>
+            `;
+        }
+        if (project.backupLink) {
+            linksHtml += `
+                <a href="${project.backupLink}" class="flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold rounded-lg transition-all shadow-md hover:shadow-lg">
+                    <span>${project.backupLinkText || 'Download'}</span>
+                    <i data-lucide="download" class="w-4 h-4"></i>
+                </a>
+            `;
+        }
+        linksContainer.innerHTML = linksHtml;
+
+        // Fill Media Data...
+        const mediaList = [];
+        if (project.videos) project.videos.forEach(v => mediaList.push({ type: 'video', src: v }));
+        if (project.images) project.images.forEach(img => mediaList.push({ type: 'image', src: img }));
+        renderMediaPlayer(mediaList, project);
+        // ... (Kết thúc phần logic data) ...
+
+
+        // --- ANIMATION MỞ (Updated Target) ---
+        const modal = document.getElementById('project-modal');
+        // Target mới: Wrapper chứa cả nút và content box
+        const animationWrapper = document.getElementById('modal-animation-wrapper');
+
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        document.body.style.overflow = 'hidden';
+
+        setTimeout(() => {
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            // Áp dụng animation lên wrapper
+            animationWrapper.classList.remove('scale-95', 'opacity-0');
+            animationWrapper.classList.add('scale-100', 'opacity-100');
+        }, 10);
+        
+        lucide.createIcons();
+    }
+
+    function renderMediaPlayer(mediaList, project) {
+        const mediaSection = document.getElementById('modal-media-section');
+        const mainContainer = document.getElementById('modal-main-media');
+        const thumbContainer = document.getElementById('modal-thumbnails');
+        
+        // Reset nội dung
+        mainContainer.innerHTML = '';
+        thumbContainer.innerHTML = '';
+
+        // 1. Nếu không có media: Ẩn section
+        if (mediaList.length === 0) {
+            mediaSection.classList.add('hidden');
+            return; 
+        }
+        mediaSection.classList.remove('hidden');
+
+        // --- CẤU HÌNH CLASS CONTAINER ---
+        // Giữ nguyên các class quan trọng để layout Flex hoạt động với nút bấm
+        thumbContainer.className = "flex-1 flex gap-3 overflow-x-auto custom-scrollbar scroll-smooth justify-start p-2"; 
+        
+        // 2. Hàm hiển thị Media chính
+        const setMainMedia = (index) => {
+            const item = mediaList[index];
+            mainContainer.innerHTML = ''; 
+
+            if (item.type === 'video') {
+                const embedUrl = getYoutubeEmbedUrl(item.src);
+                mainContainer.innerHTML = `
+                    <iframe src="${embedUrl}?autoplay=1&rel=0" 
+                            title="YouTube video player" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen
+                            class="w-full h-full object-cover">
+                    </iframe>`;
+            } else {
+                mainContainer.innerHTML = `<img src="${item.src}" class="h-full w-full object-contain" alt="Project Media">`;
+            }
+
+            // Highlight Active Thumbnail
+            Array.from(thumbContainer.children).forEach((child, i) => {
+                if (i === index) {
+                    child.classList.remove('opacity-50', 'ring-transparent');
+                    child.classList.add('opacity-100', 'ring-2', 'ring-sky-500');
+                    // Tự động cuộn thumbnail được chọn vào tầm nhìn
+                    child.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                } else {
+                    child.classList.remove('opacity-100', 'ring-2', 'ring-sky-500');
+                    child.classList.add('opacity-50', 'ring-transparent');
+                }
+            });
+        };
+
+        // 3. Render Thumbnails
+        mediaList.forEach((media, index) => {
+            const thumbBtn = document.createElement('button');
+            
+            // flex-shrink-0: Không cho phép co lại
+            thumbBtn.className = "flex-shrink-0 w-24 h-16 bg-slate-100 rounded-lg overflow-hidden transition-all duration-200 border border-slate-200 opacity-50 hover:opacity-100";
+            
+            if (media.type === 'video') {
+                thumbBtn.innerHTML = `<div class="w-full h-full flex items-center justify-center bg-slate-800"><i data-lucide="play-circle" class="text-white w-6 h-6"></i></div>`;
+            } else {
+                thumbBtn.innerHTML = `<img src="${media.src}" class="w-full h-full object-cover">`;
+            }
+
+            thumbBtn.onclick = (e) => {
+                e.stopPropagation();
+                setMainMedia(index);
+            };
+            thumbContainer.appendChild(thumbBtn);
+        });
+
+        // Chọn cái đầu tiên
+        setMainMedia(0);
+    }
+
+    function scrollThumbnails(direction) {
+        const container = document.getElementById('modal-thumbnails');
+        if (container) {
+            // Cuộn 200px mỗi lần bấm
+            const scrollAmount = 200; 
+            container.scrollBy({
+                left: direction * scrollAmount,
+                behavior: 'smooth' 
+            });
+        }
+    }
+
+    function closeModal() {
+        const modal = document.getElementById('project-modal');
+        // Target mới: Wrapper
+        const animationWrapper = document.getElementById('modal-animation-wrapper');
+
+        // --- ANIMATION ĐÓNG (Updated Target) ---
+        modal.classList.add('opacity-0', 'pointer-events-none');
+        // Áp dụng animation đóng lên wrapper
+        animationWrapper.classList.remove('scale-100', 'opacity-100');
+        animationWrapper.classList.add('scale-95', 'opacity-0');
+
+        setTimeout(() => {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.body.style.overflow = '';
+            document.getElementById('modal-main-media').innerHTML = '';
+        }, 300);
     }
 </script>
 </body>
