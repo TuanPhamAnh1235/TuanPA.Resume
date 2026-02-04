@@ -1,5 +1,5 @@
 const cvData = {
-    fullName: "Đặng Văn Thanh",
+    fullName: "Phạm Anh Tuấn",
     jobTitle: "Unity Game Programmer",
     portfolioInfo: {
         title: "Danh mục dự án",
